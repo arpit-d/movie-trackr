@@ -13,7 +13,6 @@ class MyApp extends StatelessWidget {
       locationBuilder: SimpleLocationBuilder(
         routes: {
           '/': (context) => MyHomePage(),
-          '/new_page': (context) => NewPage(),
         },
       ),
     );
@@ -21,9 +20,9 @@ class MyApp extends StatelessWidget {
       routeInformationParser: BeamerRouteInformationParser(),
       routerDelegate: routerDelegate,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Movie Trackr',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xFF3A3238),
       ),
     );
   }
@@ -37,17 +36,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF04030F),
       appBar: AppBar(
-        title: Text('Beamer eg'),
+        title: Text(
+          'Movie Trackr',
+        ),
       ),
       body: Center(
         child: Column(
@@ -61,30 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Beamer.of(context).beamToNamed('/new_page', replaceCurrent: true);
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class NewPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-           Beamer.of(context).beamBack();
-          },
-          child: Text('Go Back'),
         ),
       ),
     );
