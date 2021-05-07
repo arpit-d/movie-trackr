@@ -2,6 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import 'business_logic/view_models/movies_screen_view_model.dart';
 import 'services/locator.dart';
@@ -27,7 +28,6 @@ class MyApp extends StatelessWidget {
       routerDelegate: routerDelegate,
       debugShowCheckedModeBanner: false,
       title: 'Movie Trackr',
-      darkTheme: ThemeData.dark(),
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           iconTheme: IconThemeData(color: Colors.white),
@@ -46,7 +46,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   MoviesScreenViewModel model = serviceLocator<MoviesScreenViewModel>();
 
   @override
@@ -67,17 +66,29 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-            ),
-          ],
+      body: ChangeNotifierProvider<MoviesScreenViewModel>(
+        create: (context) => model,
+        child: Consumer<MoviesScreenViewModel>(
+          builder: (context, model, child) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: ListView.builder(
+                  itemCount: model.movies.length,
+                  itemBuilder: (context, index) {
+                    final movie = model.movies[index];
+                    return Card(
+                      child: ListTile(
+                        subtitle: Text(movie.overview),
+                        title: Text(movie.title),
+                        onTap: () {},
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

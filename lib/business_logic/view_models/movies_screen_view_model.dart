@@ -8,7 +8,7 @@ class MoviesScreenViewModel extends ChangeNotifier {
   List<MovieModel> _movies = [];
   void loadData() async {
     _movies = await _webService.fetchMovies();
-    print(_movies);
+    print(_movies.length);
     notifyListeners();
   }
 
