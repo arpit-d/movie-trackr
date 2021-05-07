@@ -1,28 +1,40 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'business_logic/view_models/movies_screen_view_model.dart';
+import 'services/locator.dart';
 
 void main() {
+  setupServiceLocator();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  static final routerDelegate = BeamerRouterDelegate(
+    locationBuilder: SimpleLocationBuilder(
+      routes: {
+        '/': (context) => MyHomePage(),
+        '/new_page': (context) => NewPage(),
+      },
+    ),
+  );
   @override
   Widget build(BuildContext context) {
-    final routerDelegate = BeamerRouterDelegate(
-      locationBuilder: SimpleLocationBuilder(
-        routes: {
-          '/': (context) => MyHomePage(),
-        },
-      ),
-    );
     return MaterialApp.router(
       routeInformationParser: BeamerRouteInformationParser(),
       routerDelegate: routerDelegate,
       debugShowCheckedModeBanner: false,
       title: 'Movie Trackr',
+      darkTheme: ThemeData.dark(),
       theme: ThemeData(
-        primaryColor: Color(0xFF3A3238),
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.white),
+          brightness: Brightness.dark,
+        ),
+        primaryColor: const Color(0xFF555b6e),
+        textTheme: GoogleFonts.openSansTextTheme(),
       ),
     );
   }
@@ -35,15 +47,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  MoviesScreenViewModel model = serviceLocator<MoviesScreenViewModel>();
+
+  @override
+  void initState() {
+    model.loadData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF04030F),
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           'Movie Trackr',
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
       ),
       body: Center(
         child: Column(
@@ -54,9 +76,29 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class NewPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Container(
+        child: Center(
+          child: MaterialButton(
+            child: Text('a'),
+            onPressed: () {
+              if (!context.canBeamBack) {
+                print('ee');
+              }
+            },
+          ),
         ),
       ),
     );
